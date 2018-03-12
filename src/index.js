@@ -67,6 +67,25 @@ const FilterLink = ({filter, currentFilter, children}) => {
     )
 };
 
+const AddTodo = ({
+    onAddClick
+}) => {
+    let input;
+    return (
+        <div>
+            <input ref={(node) => {
+                input = node;
+            }} />
+            <button onClick={() => {
+                onAddClick(input.value);
+                input.value = '';
+            }}>
+                Add todo
+            </button>
+        </div>
+    )
+}
+
 const getVisibleTodos = (todos, filter) => {
     switch (filter) {
         case 'SHOW_ALL':
@@ -93,19 +112,15 @@ class TodoApp extends Component {
         );
         return (
             <div>
-                <input ref={(node) => {
-                    this.input = node;
-                }} />
-                <button onClick={() => {
-                    todoStore.dispatch({
-                        type: 'ADD_TODO',
-                        text: this.input.value,
-                        id: nextTodoId++
-                    });
-                    this.input.value = '';
-                }}>
-                    Add todo
-                </button>
+                <AddTodo
+                    onAddClick = {(value) => {
+                        todoStore.dispatch({
+                            type: 'ADD_TODO',
+                            text: value,
+                            id: nextTodoId++
+                        });
+                    }}
+                />
                 <TodoList
                     todos = {visibleTodos}
                     onTodoClick = {(id) => {
