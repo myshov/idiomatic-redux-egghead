@@ -46,13 +46,12 @@ const TodoList = ({
     </ul>
 )
 
-const FilterLink = ({
-    filter,
-    currentFilter,
+const Link = ({
+    active,
     children,
     onClick
 }) => {
-    if (filter === currentFilter) {
+    if (active) {
         return <span>{children}</span>;
     }
 
@@ -61,13 +60,46 @@ const FilterLink = ({
             href = '#'
             onClick = {e => {
                 e.preventDefault();
-                onClick(filter);
+                onClick();
             }}
         >
             {children}
         </a>
     )
 };
+
+class FilterLink extends Component {
+    componentDidMount() {
+        this.unsubscribe = todoStore.subscribe(() => {
+            this.forceUpdate();
+        })
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe();
+    }
+
+    render() {
+        const props = this.props;
+        const state = todoStore.getState();
+
+        return (
+            <Link
+                active = {
+                    props.filter === state.visibilityFilter
+                }
+                onClick = {() => {
+                    todoStore.dispatch({
+                        type: 'SET_VISIBILITY_FILTER',
+                        filter: props.filter
+                    });
+                }}
+            >
+                {props.children}
+            </Link>
+        );
+    }
+}
 
 const AddTodo = ({
     onAddClick
@@ -97,24 +129,18 @@ const Footer = ({
         {' '}
         <FilterLink
             filter = 'SHOW_ALL'
-            currentFilter = {visibilityFilter}
-            onClick = {onFilterClick}
         >
             All
         </FilterLink>
         {' '}
         <FilterLink
             filter = 'SHOW_ACTIVE'
-            currentFilter = {visibilityFilter}
-            onClick = {onFilterClick}
         >
             Active
         </FilterLink>
         {' '}
         <FilterLink
             filter = 'SHOW_COMPLETED'
-            currentFilter = {visibilityFilter}
-            onClick = {onFilterClick}
         >
             Completed
         </FilterLink>
