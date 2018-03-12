@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.completed {
+    text-decoration: line-through;
+}
+
+.filter {
+    margin-left: 10px;
+}
