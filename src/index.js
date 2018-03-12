@@ -13,24 +13,38 @@ const todoStore = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
-const TodoItem = (todo) => {
-    let classname = '';
-    if (todo.completed) {
-        classname = 'completed';
-    }
-
-    return <li key={todo.id}
-        className = {classname}
-        onClick={() => {
-            todoStore.dispatch({
-                type: 'TOGGLE_TODO',
-                id: todo.id
-            })
+const Todo = ({
+    onClick,
+    completed,
+    text
+}) => (
+    <li
+        onClick={onClick}
+        style={{
+            textDecoration:
+                completed ?
+                    'line-through' :
+                    'none'
         }}
     >
-        {todo.text}
+        {text}
     </li>
-};
+);
+
+const TodoList = ({
+    todos,
+    onTodoClick
+}) => (
+    <ul>
+        {todos.map(todo =>
+            <Todo
+                key={todo.id}
+                {...todo}
+                onClick = {() => onTodoClick(todo.id)}
+            />
+        )}
+    </ul>
+)
 
 const FilterLink = ({filter, currentFilter, children}) => {
     if (filter === currentFilter) {
@@ -92,9 +106,15 @@ class TodoApp extends Component {
                 }}>
                     Add todo
                 </button>
-                <ul>
-                    {visibleTodos.map(todo => TodoItem(todo))}
-                </ul>
+                <TodoList
+                    todos = {visibleTodos}
+                    onTodoClick = {(id) => {
+                        todoStore.dispatch({
+                            type: 'TOGGLE_TODO',
+                            id: id
+                        })
+                    }}
+                />
                 <p>
                     Show:
                     {' '}
