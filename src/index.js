@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import {Provider} from 'react-redux';
 
 import './index.css';
 import App from './App';
@@ -212,21 +213,6 @@ const TodoApp = () => (
         <Footer />
     </div>
 );
-
-class Provider extends Component {
-    getChildContext() {
-        return {
-            store: this.props.store
-        }
-    }
-
-    render() {
-        return this.props.children;
-    }
-}
-Provider.childContextTypes = {
-    store: PropTypes.object
-};
 
 const todoStore = createStore( todosApp,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
