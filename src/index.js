@@ -106,7 +106,7 @@ FilterLink.contextTypes = {
     store: PropTypes.object
 };
 
-const AddTodo = (props, {store}) => {
+let AddTodo = ({dispatch}) => {
     let input;
     return (
         <div>
@@ -114,7 +114,7 @@ const AddTodo = (props, {store}) => {
                 input = node;
             }} />
             <button onClick={() => {
-                store.dispatch({
+                dispatch({
                     type: 'ADD_TODO',
                     text: input.value,
                     id: nextTodoId++
@@ -126,9 +126,7 @@ const AddTodo = (props, {store}) => {
         </div>
     )
 }
-AddTodo.contextTypes = {
-    store: PropTypes.object
-};
+AddTodo = connect()(AddTodo);
 
 const Footer = () => (
     <p>
@@ -154,7 +152,7 @@ const Footer = () => (
     </p>
 );
 
-const mapStateToProps = (state) => {
+const mapStateToTodoListProps = (state) => {
     return {
         todos: getVisibleTodos(
             state.todos,
@@ -163,7 +161,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToTodoListProps = (dispatch) => {
     return {
         onTodoClick: id => {
             dispatch({
@@ -175,8 +173,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const VisibleTodoList = connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToTodoListProps,
+    mapDispatchToTodoListProps
 )(TodoList)
 
 const getVisibleTodos = (todos, filter) => {
