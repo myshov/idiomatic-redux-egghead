@@ -7,11 +7,20 @@ import './index.css';
 import TodoApp from './components/TodoApp';
 import registerServiceWorker from './registerServiceWorker';
 import rootReducer from './reducers';
+import {loadState, saveState} from './localStorage';
 
 
-const todoStore = createStore( rootReducer,
+const persistedState = loadState();
+
+const todoStore = createStore(
+    rootReducer,
+    persistedState,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
+todoStore.subscribe(() => {
+    saveState(todoStore.getState());
+});
 
 ReactDOM.render(
     <Provider store={todoStore}>
