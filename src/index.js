@@ -19,7 +19,9 @@ const todoStore = createStore(
 );
 
 todoStore.subscribe(() => {
-    saveState(todoStore.getState());
+    saveState({
+        todos: todoStore.getState().todos
+    });
 });
 
 ReactDOM.render(
