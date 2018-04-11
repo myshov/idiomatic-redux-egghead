@@ -6,10 +6,10 @@ import {createStore} from 'redux';
 import './index.css';
 import TodoApp from './components/TodoApp';
 import registerServiceWorker from './registerServiceWorker';
-import todosApp from './reducers';
+import rootReducer from './reducers';
 
 
-const todoStore = createStore( todosApp,
+const todoStore = createStore( rootReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 

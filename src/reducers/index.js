@@ -54,7 +54,7 @@ const visibilityFilter = (
     }
 }
 
-const todosApp = combineReducers({
+const rootReducer = combineReducers({
     todos,
     visibilityFilter
 });
@@ -118,4 +118,4 @@ testAddTodo();
 testToggleTodo();
 console.log('test passed');
 
-export default todosApp;
+export default rootReducer;
