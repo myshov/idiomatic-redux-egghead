@@ -4,17 +4,17 @@ import rootReducer from './reducers';
 
 
 const addLoggingToDispatch = (store) => {
-    const rawDispatch = store.dispatch;
+    const next = store.dispatch;
 
     if (!console.group) {
-        return rawDispatch;
+        return next;
     }
 
     return (action) => {
         console.group(action.type);
         console.log('%c prev state', 'color: gray', store.getState());
         console.log('%c action', 'color: blue', action);
-        const returnValue = rawDispatch(action);
+        const returnValue = next(action);
         console.log('%c next state', 'color: green', store.getState());
         console.groupEnd(action.type);
         return returnValue;
@@ -22,13 +22,13 @@ const addLoggingToDispatch = (store) => {
 }
 
 const addPromiseSupportToDispatch = (store) => {
-    const rawDispatch = store.dispatch;
+    const next = store.dispatch;
 
     return (action) => {
         if (action instanceof Promise) {
-            return action.then(rawDispatch);
+            return action.then(next);
         } else {
-            return rawDispatch(action);
+            return next(action);
         }
     }
 }
