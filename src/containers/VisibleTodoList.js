@@ -3,23 +3,11 @@ import {withRouter} from 'react-router-dom';
 
 import {toggleTodo} from '../actions';
 import TodoList from '../components/TodoList';
-
-const getVisibleTodos = (todos, filter) => {
-    switch (filter) {
-        case 'all':
-            return todos;
-        case 'completed':
-            return todos.filter(t => t.completed);
-        case 'active':
-            return todos.filter(t => !t.completed);
-        default:
-            return todos;
-    }
-}
+import {getVisibleTodos} from '../reducers';
 
 const mapStateToProps = (state, {match}) => ({
     todos: getVisibleTodos(
-        state.todos,
+        state,
         match.params.filter
     )
 });
