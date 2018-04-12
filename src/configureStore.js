@@ -21,6 +21,18 @@ const addLoggingToDispatch = (store) => {
     }
 }
 
+const addPromiseSupportToDispatch = (store) => {
+    const rawDispatch = store.dispatch;
+
+    return (action) => {
+        if (action instanceof Promise) {
+            return action.then(rawDispatch);
+        } else {
+            return rawDispatch(action);
+        }
+    }
+}
+
 const configureStore = () => {
     const todoStore = createStore(
         rootReducer,
@@ -30,6 +42,8 @@ const configureStore = () => {
     if (process.env.NODE_ENV !== 'production') {
         todoStore.dispatch = addLoggingToDispatch(todoStore);
     }
+
+    todoStore.dispatch = addPromiseSupportToDispatch(todoStore);
 
     return todoStore;
 }
