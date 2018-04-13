@@ -13,6 +13,11 @@ export const toggleTodo = (id) => ({
     id
 });
 
+export const requestTodos = (filter) => ({
+    type: 'REQUEST_TODOS',
+    filter,
+});
+
 const receiveTodos = (response, filter) => ({
     type: 'RECEIVE_TODOS',
     response,
