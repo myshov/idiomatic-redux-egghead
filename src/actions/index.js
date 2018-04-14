@@ -13,7 +13,7 @@ export const toggleTodo = (id) => ({
     id
 });
 
-export const requestTodos = (filter) => ({
+const requestTodos = (filter) => ({
     type: 'REQUEST_TODOS',
     filter,
 });
@@ -24,6 +24,10 @@ const receiveTodos = (response, filter) => ({
     filter,
 });
 
-export const fetchTodos = (filter) =>
-    api.fetchTodos(filter).then((response) =>
-        receiveTodos(response, filter));
+export const fetchTodos = (filter) => (dispatch) => {
+    dispatch(requestTodos(filter));
+
+    return api.fetchTodos(filter).then((response) => {
+        dispatch(receiveTodos(response, filter));
+    });
+};
