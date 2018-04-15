@@ -1,50 +1,48 @@
 import {normalize} from 'normalizr';
 
-import * as api from '../api';
 import * as schema from './schema';
-import {getIsFetching} from '../reducers';
 
 
-export const fetchTodos = (filter) => (dispatch, getState) => {
-    if (getIsFetching(getState(), filter)) {
-        return Promise.resolve();
-    }
+// action creators for views
+export const fetchTodos = filter => ({
+    type: 'FETCH_TODOS',
+    filter,
+});
 
-    dispatch({
-        type: 'FETCH_TODOS_REQUEST',
-        filter,
-    });
+export const toggleTodo = id => ({
+    type: 'TOGGLE_TODO',
+    id,
+});
 
-    return api.fetchTodos(filter).then(
-        (response) => {
-            dispatch({
-                type: 'FETCH_TODOS_SUCCESS',
-                response: normalize(response, schema.arrayOfTodos),
-                filter,
-            });
-        },
-        (error) => {
-            dispatch({
-                type: 'FETCH_TODOS_FAILURE',
-                message: error.message,
-                filter,
-            });
-        }
-    );
-};
+export const addTodo = text => ({
+    type: 'ADD_TODO',
+    text,
+});
 
-export const addTodo = (text) => (dispatch) => 
-    api.addTodo(text).then((response) => {
-        dispatch({
-            type: 'ADD_TODO_SUCCESS',
-            response: normalize(response, schema.todo),
-        });
-    });
+// action creators for epics
+export const fetchTodosRequest = filter => ({
+    type: 'FETCH_TODOS_REQUEST',
+    filter,
+});
 
-export const toggleTodo = (id) => (dispatch) =>
-    api.toggleTodo(id).then((response) => {
-        dispatch({
-            type: 'TOGGLE_TODO_SUCCESS',
-            response: normalize(response, schema.todo),
-        });
-    });
+export const fetchTodosSuccess = (filter, response) =>({
+    type: 'FETCH_TODOS_SUCCESS',
+    response: normalize(response, schema.arrayOfTodos),
+    filter,
+});
+
+export const fetchTodosFailure = (filter, error) => ({
+    type: 'FETCH_TODOS_FAILURE',
+    message: error.message,
+    filter,
+});
+
+export const toggleTodoSuccess = response => ({
+    type: 'TOGGLE_TODO_SUCCESS',
+    response: normalize(response, schema.todo),
+});
+
+export const addTodoSuccess = response => ({
+    type: 'ADD_TODO_SUCCESS',
+    response: normalize(response, schema.todo),
+});
