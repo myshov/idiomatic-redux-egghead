@@ -7,12 +7,12 @@ const createList = (filter) => {
                 if (action.filter !== filter) {
                     return state;
                 }
-                return action.response.map(todo => todo.id);
+                return action.response.result;
             case 'ADD_TODO_SUCCESS':
                 if (filter === 'completed') {
                     return state;
                 }
-                return [...state, action.response.id];
+                return [...state, action.response.result];
             default:
                 return state;
         }
